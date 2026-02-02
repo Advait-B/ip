@@ -36,12 +36,13 @@ public class Mango {
         String[] words = input.split(" ", 2);
         String prompt = words[0];
 
+        // First, check if the prompt is 'list' (subsequent message, or lack thereof, is irrelevant)
         if (prompt.equals("list")) {
             printList(tasks, taskCount);
             return;
         }
 
-        // Early return if no message after the prompt command
+        // For the remaining commands, return if no message after the prompt command
         boolean noMessage = words.length < 2 || words[1].trim().isEmpty();
         if (noMessage) {
             helpMessage();
@@ -118,8 +119,7 @@ public class Mango {
     }
 
     private static void addTodo(String input) {
-        if (taskCount >= MAX_TASKS) {
-            System.out.println("sorry.. i cannot add anymore tasks!");
+        if (isFull()) {
             return;
         }
         tasks[taskCount] = new Todo(input);
@@ -128,34 +128,41 @@ public class Mango {
     }
 
     private static void addDeadline(String input) {
-        if (taskCount >= MAX_TASKS) {
-            System.out.println("sorry.. i cannot add anymore tasks!");
+        if (isFull()) {
             return;
         }
         boolean containsDeadline = input.contains("/by");
+
+        // Checks if the keyword '/by' is missing
         if (!containsDeadline) {
             System.out.println("oh dear, you have forgotten to add a deadline");
             helpMessage();
             return;
         }
+
+        // Separates the string into two parts
         int idx = input.indexOf("/by");
         String description = input.substring(0, idx).trim();
         String by = input.substring(idx + BY_LENGTH).trim();
+
+        // Checks if the date to complete by is missing
         if (by.isEmpty()) {
             System.out.println("oh dear, you have forgotten to add a deadline");
             helpMessage();
             return;
         }
+
         tasks[taskCount] = new Deadline(description, by);
         taskCount++;
         addTask();
     }
 
     private static void addEvent(String input) {
-        if (taskCount >= MAX_TASKS) {
-            System.out.println("sorry.. i cannot add anymore tasks!");
+        if (isFull()) {
             return;
         }
+
+        // Checks if the keyword '/from' or '/to' are missing
         boolean containsFrom = input.contains("/from");
         boolean containsTo = input.contains("/to");
         if (!containsFrom || !containsTo) {
@@ -163,18 +170,23 @@ public class Mango {
             helpMessage();
             return;
         }
+
+        // Computes index of 'from' and 'to'
         int idx1 = input.indexOf("/from");
         int idx2 = input.indexOf("/to");
 
+        // Returns early if 'to' is before 'from'
         if (idx1 >= idx2) {
             System.out.println("oh dear, /from should come before /to");
             return;
         }
 
+        // Separates the string into its constituent parts
         String description = input.substring(0, idx1).trim();
         String from = input.substring(idx1 + FROM_LENGTH, idx2).trim();
         String to = input.substring(idx2 + TO_LENGTH).trim();
 
+        // Returns if any of the field descriptions are missing
         if (from.isEmpty() || to.isEmpty()) {
             System.out.println("oh dear, you have forgotten to add the start or end date");
             helpMessage();
@@ -190,6 +202,14 @@ public class Mango {
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + tasks[taskCount - 1]);
         System.out.println("Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static boolean isFull() {
+        if (taskCount >= MAX_TASKS) {
+            System.out.println("sorry.. i cannot add anymore tasks!");
+            return true;
+        }
+        return false;
     }
 
     private static void mark(String input) {
