@@ -221,7 +221,7 @@ public class Mango {
             System.out.println("this task is already marked as done!");
         } else {
             tasks[index].markAsDone();
-            System.out.println("hooray! you've completed this task. i've marked it as done: ");
+            System.out.println("hooray! you've completed this task. i've marked it as done:");
             System.out.println(tasks[index]);
             completedTasks++;
         }
@@ -236,7 +236,7 @@ public class Mango {
             System.out.println("this task is already unmarked!");
         } else {
             tasks[index].unmark();
-            System.out.println("oh dear, it seems you have NOT completed this task. i've unmarked it: ");
+            System.out.println("oh dear, it seems you have NOT completed this task. i've unmarked it:");
             System.out.println(tasks[index]);
             completedTasks--;
         }
