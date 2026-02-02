@@ -2,68 +2,105 @@ import java.util.Scanner;
 
 public class Mango {
 
+    // Literals defined based on function calls
     private static final int MAX_TASKS = 100;
+    private static final int BY_LENGTH = 4;
+    private static final int FROM_LENGTH = 6;
+    private static final int TO_LENGTH = 4;
+
     private static Task[] tasks = new Task[MAX_TASKS];
     private static int taskCount = 0;
     private static int completedTasks = 0;
 
     public static void main(String[] args) {
+        greetingMessage();
+        helpMessage();
         chat();
+        goodbyeMessage();
     }
 
     private static void chat() {
-        greetingMessage();
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
-
         while (!input.equals("bye")) {
-            String[] words = input.split(" ", 2);
-            String prompt = words[0];
-
-            if (prompt.equals("list")) {
-                printList(tasks, taskCount);
-                input = in.nextLine();
-                continue;
-            }
-
-            boolean noMessage = words.length < 2 || words[1].trim().isEmpty();
-            if (noMessage) {
-                helpMessage();
-                input = in.nextLine();
-                continue;
-            }
-
-            String message = words[1];
-            switch (prompt) {
-            case "todo":
-                addTodo(message);
-                break;
-            case "deadline":
-                addDeadline(message);
-                break;
-            case "event":
-                addEvent(message);
-                break;
-            case "mark":
-                mark(message);
-                break;
-            case "unmark":
-                unmark(message);
-                break;
-            default:
-                helpMessage();
-                break;
-            }
-
+            processCommand(input);
             input = in.nextLine();
         }
-        goodbyeMessage();
         in.close();
+    }
+    /**
+     * Parses user input, and early incorrect input detection.
+     */
+
+    private static void processCommand(String input) {
+        String[] words = input.split(" ", 2);
+        String prompt = words[0];
+
+        if (prompt.equals("list")) {
+            printList(tasks, taskCount);
+            return;
+        }
+
+        // Early return if no message after the prompt command
+        boolean noMessage = words.length < 2 || words[1].trim().isEmpty();
+        if (noMessage) {
+            helpMessage();
+            return;
+        }
+
+        String message = words[1];
+        executeCommand(prompt, message);
+    }
+    /**
+     * Executes the corresponding action based on the command.
+     */
+
+    private static void executeCommand(String command, String arguments) {
+        switch (command) {
+        case "todo":
+            addTodo(arguments);
+            break;
+        case "deadline":
+            addDeadline(arguments);
+            break;
+        case "event":
+            addEvent(arguments);
+            break;
+        case "mark":
+            mark(arguments);
+            break;
+        case "unmark":
+            unmark(arguments);
+            break;
+        default:
+            helpMessage();
+            break;
+        }
+    }
+
+    private static void greetingMessage() {
+        System.out.println("hey there, i'm mango!" + System.lineSeparator() + "how can i help?");
+    }
+
+    private static void goodbyeMessage() {
+        System.out.println("bye! hope to see you again!");
+    }
+    /**
+     * Displays formatting requirements for user inputs.
+     */
+
+    private static void helpMessage() {
+        System.out.println("please follow these guidelines for the possible task inputs:");
+        System.out.println("1. todo: todo [taskDetails]");
+        System.out.println("2. deadline: deadline [taskDetails] /by [dateDetails]");
+        System.out.println("3. event: event [taskDetails] /from [startDate] /to [endDate]");
+        System.out.println("please follow these guidelines for marking/unmarking:");
+        System.out.println("1. mark/unmark [taskNumber]");
     }
 
     private static void printList(Task[] tasks, int taskCount) {
         if (taskCount == 0) {
-            System.out.println("please add some tasks for us to list :)" + System.lineSeparator());
+            System.out.println("please add some tasks for us to list :) \n");
             helpMessage();
             return;
         }
@@ -103,7 +140,7 @@ public class Mango {
         }
         int idx = input.indexOf("/by");
         String description = input.substring(0, idx).trim();
-        String by = input.substring(idx + 4).trim();
+        String by = input.substring(idx + BY_LENGTH).trim();
         if (by.isEmpty()) {
             System.out.println("oh dear, you have forgotten to add a deadline");
             helpMessage();
@@ -135,8 +172,8 @@ public class Mango {
         }
 
         String description = input.substring(0, idx1).trim();
-        String from = input.substring(idx1 + 6, idx2).trim();
-        String to = input.substring(idx2 + 4).trim();
+        String from = input.substring(idx1 + FROM_LENGTH, idx2).trim();
+        String to = input.substring(idx2 + TO_LENGTH).trim();
 
         if (from.isEmpty() || to.isEmpty()) {
             System.out.println("oh dear, you have forgotten to add the start or end date");
@@ -146,8 +183,13 @@ public class Mango {
 
         tasks[taskCount] = new Event(description, from, to);
         taskCount++;
-
         addTask();
+    }
+
+    private static void addTask() {
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + tasks[taskCount - 1]);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
     }
 
     private static void mark(String input) {
@@ -192,28 +234,5 @@ public class Mango {
             System.out.println("please input a number in the valid task range. try again");
             return -1;
         }
-    }
-
-    private static void addTask() {
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + tasks[taskCount - 1]);
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
-    }
-
-    private static void helpMessage() {
-        System.out.println("please follow these guidelines for the possible task inputs:");
-        System.out.println("1. todo: todo [taskDetails]");
-        System.out.println("2. deadline: deadline [taskDetails] /by [dateDetails]");
-        System.out.println("3. event: event [taskDetails] /from [startDate] /to [endDate]");
-        System.out.println("please follow these guidelines for marking/unmarking:");
-        System.out.println("1. mark/unmark [taskNumber]");
-    }
-
-    private static void greetingMessage() {
-        System.out.println("hey there, i'm mango!" + System.lineSeparator() + "how can i help?");
-    }
-
-    private static void goodbyeMessage() {
-        System.out.println("bye! hope to see you again!");
     }
 }
