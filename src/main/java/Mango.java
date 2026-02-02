@@ -3,28 +3,156 @@ import java.util.Scanner;
 public class Mango {
 
     private static final int MAX_TASKS = 100;
+    private static Task[] tasks = new Task[MAX_TASKS];
+    private static int taskCount = 0;
+    private static int completedTasks = 0;
 
-    public static void printList(Task[] tasks, int taskCount) {
-        int undoneCount = 0;
-        for (int i = 0; i < taskCount; i++) {
-            if (!tasks[i].isDone()) {
-                undoneCount++;
+    public static void main(String[] args) {
+        chat();
+    }
+
+    private static void chat() {
+        greetingMessage();
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+
+        while (!input.equals("bye")) {
+            String[] words = input.split(" ", 2);
+            String prompt = words[0];
+
+            if (prompt.equals("list")) {
+                printList(tasks, taskCount);
+                input = in.nextLine();
+                continue;
             }
+
+            boolean noMessage = words.length < 2 || words[1].trim().isEmpty();
+            if (noMessage) {
+                helpMessage();
+                input = in.nextLine();
+                continue;
+            }
+
+            String message = words[1];
+            switch (prompt) {
+            case "todo":
+                addTodo(message);
+                break;
+            case "deadline":
+                addDeadline(message);
+                break;
+            case "event":
+                addEvent(message);
+                break;
+            case "mark":
+                mark(message);
+                break;
+            case "unmark":
+                unmark(message);
+                break;
+            default:
+                helpMessage();
+                break;
+            }
+
+            input = in.nextLine();
         }
-        if (taskCount - undoneCount != 0) {
-            System.out.println("hooray! you have completed " + (taskCount - undoneCount) + " task(s) :)");
+        goodbyeMessage();
+        in.close();
+    }
+
+    private static void printList(Task[] tasks, int taskCount) {
+        if (taskCount == 0) {
+            System.out.println("please add some tasks for us to list :)" + System.lineSeparator());
+            helpMessage();
+            return;
         }
-        if (undoneCount != 0) {
-            System.out.println("oh dear, you have " + undoneCount + " task(s) you MUST complete!");
+        if (completedTasks != 0) {
+            System.out.println("hooray! you have completed " + completedTasks + " task(s) :)");
         }
+        int incompleteTasks = taskCount - completedTasks;
+        if (incompleteTasks != 0) {
+            System.out.println("oh dear, you have " + incompleteTasks + " task(s) you MUST complete!");
+        }
+        System.out.println("here's your task list:");
         for (int i = 1; i <= taskCount; i++) {
             System.out.println(i + ". " + tasks[i - 1]);
         }
     }
 
-    public static void markAsDone(Task[] tasks, int taskCount, int index) {
-        if (index < 0 || index >= taskCount) {
-            System.out.println("invalid task number :(");
+    private static void addTodo(String input) {
+        if (taskCount >= MAX_TASKS) {
+            System.out.println("sorry.. i cannot add anymore tasks!");
+            return;
+        }
+        tasks[taskCount] = new Todo(input);
+        taskCount++;
+        addTask();
+    }
+
+    private static void addDeadline(String input) {
+        if (taskCount >= MAX_TASKS) {
+            System.out.println("sorry.. i cannot add anymore tasks!");
+            return;
+        }
+        boolean containsDeadline = input.contains("/by");
+        if (!containsDeadline) {
+            System.out.println("oh dear, you have forgotten to add a deadline");
+            helpMessage();
+            return;
+        }
+        int idx = input.indexOf("/by");
+        String description = input.substring(0, idx).trim();
+        String by = input.substring(idx + 4).trim();
+        if (by.isEmpty()) {
+            System.out.println("oh dear, you have forgotten to add a deadline");
+            helpMessage();
+            return;
+        }
+        tasks[taskCount] = new Deadline(description, by);
+        taskCount++;
+        addTask();
+    }
+
+    private static void addEvent(String input) {
+        if (taskCount >= MAX_TASKS) {
+            System.out.println("sorry.. i cannot add anymore tasks!");
+            return;
+        }
+        boolean containsFrom = input.contains("/from");
+        boolean containsTo = input.contains("/to");
+        if (!containsFrom || !containsTo) {
+            System.out.println("oh dear, you have forgotten to add the start or end date");
+            helpMessage();
+            return;
+        }
+        int idx1 = input.indexOf("/from");
+        int idx2 = input.indexOf("/to");
+
+        if (idx1 >= idx2) {
+            System.out.println("oh dear, /from should come before /to");
+            return;
+        }
+
+        String description = input.substring(0, idx1).trim();
+        String from = input.substring(idx1 + 6, idx2).trim();
+        String to = input.substring(idx2 + 4).trim();
+
+        if (from.isEmpty() || to.isEmpty()) {
+            System.out.println("oh dear, you have forgotten to add the start or end date");
+            helpMessage();
+            return;
+        }
+
+        tasks[taskCount] = new Event(description, from, to);
+        taskCount++;
+
+        addTask();
+    }
+
+    private static void mark(String input) {
+        int index = isValidIndex(input);
+        if (index == -1) {
             return;
         }
         if (tasks[index].isDone()) {
@@ -33,12 +161,13 @@ public class Mango {
             tasks[index].markAsDone();
             System.out.println("hooray! you've completed this task. i've marked it as done: ");
             System.out.println(tasks[index]);
+            completedTasks++;
         }
     }
 
-    public static void unmark(Task[] tasks, int taskCount, int index) {
-        if (index < 0 || index >= taskCount) {
-            System.out.println("invalid task number :(");
+    private static void unmark(String input) {
+        int index = isValidIndex(input);
+        if (index == -1) {
             return;
         }
         if (!tasks[index].isDone()) {
@@ -47,51 +176,44 @@ public class Mango {
             tasks[index].unmark();
             System.out.println("oh dear, it seems you have NOT completed this task. i've unmarked it: ");
             System.out.println(tasks[index]);
+            completedTasks--;
         }
     }
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
-
-        System.out.println("hey there, i'm mango!" + System.lineSeparator() + "how can i help?");
-        String input = in.nextLine();
-
-        while (!input.equals("bye")) {
-            if (input.equals("list")) {
-                printList(tasks, taskCount);
-            } else if (input.startsWith("mark ")) {
-                try {
-                    input = input.substring(input.indexOf(" ") + 1).trim();
-                    int index = Integer.parseInt(input) - 1;
-                    markAsDone(tasks, taskCount, index);
-                } catch (NumberFormatException exception) {
-                    System.out.println("please input a number in the valid task range. try again");
-                }
-            } else if (input.startsWith("unmark ")) {
-                try {
-                    input = input.substring(input.indexOf(" ") + 1).trim();
-                    int index = Integer.parseInt(input) - 1;
-                    unmark(tasks, taskCount, index);
-                } catch (NumberFormatException exception) {
-                    System.out.println("please input a number in the valid task range. try again");
-                }
-            } else {
-                if (taskCount >= MAX_TASKS) {
-                    System.out.println("sorry.. i cannot add anymore tasks!");
-                } else if (input.trim().isEmpty()) {
-                    System.out.println("task description cannot be empty. try again");
-                } else {
-                    Task t = new Task(input);
-                    tasks[taskCount] = t;
-                    taskCount++;
-                    System.out.println("added: " + t.getDescription());
-                }
+    private static int isValidIndex(String input) {
+        try {
+            int index = Integer.parseInt(input) - 1;
+            if (index < 0 || index >= taskCount) {
+                System.out.println("invalid task number :(");
+                return -1;
             }
-            input = in.nextLine();
+            return index;
+        } catch (NumberFormatException exception) {
+            System.out.println("please input a number in the valid task range. try again");
+            return -1;
         }
+    }
+
+    private static void addTask() {
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + tasks[taskCount - 1]);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static void helpMessage() {
+        System.out.println("please follow these guidelines for the possible task inputs:");
+        System.out.println("1. todo: todo [taskDetails]");
+        System.out.println("2. deadline: deadline [taskDetails] /by [dateDetails]");
+        System.out.println("3. event: event [taskDetails] /from [startDate] /to [endDate]");
+        System.out.println("please follow these guidelines for marking/unmarking:");
+        System.out.println("1. mark/unmark [taskNumber]");
+    }
+
+    private static void greetingMessage() {
+        System.out.println("hey there, i'm mango!" + System.lineSeparator() + "how can i help?");
+    }
+
+    private static void goodbyeMessage() {
         System.out.println("bye! hope to see you again!");
-        in.close();
     }
 }
