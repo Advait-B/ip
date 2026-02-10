@@ -1,21 +1,21 @@
+package Mango.parser;
+
 public class MessageFormatter {
 
     private static final int BY_LENGTH = 3;
     private static final int FROM_LENGTH = 5;
     private static final int TO_LENGTH = 3;
 
-    private String taskType;
-    private String message;
+    protected String taskType;
+    protected String message;
 
     public MessageFormatter(String userInput) throws MangoException {
         if (userInput == null || userInput.trim().isEmpty()) {
             throw new MangoException("null input");
         }
-
         String[] words = userInput.split(" ", 2);
-        this.taskType = words[0].toLowerCase();
-        this.message = words.length > 1 ? words[1] : "";
-
+        taskType = words[0].toLowerCase();
+        message = words.length > 1 ? words[1] : "";
         validateCommand();
     }
 
@@ -24,15 +24,11 @@ public class MessageFormatter {
         case "list":
         case "bye":
         case "help":
-            return;
         case "todo":
         case "deadline":
         case "event":
         case "mark":
         case "unmark":
-            if (message.trim().isEmpty()) {
-                throw new MangoException(taskType);
-            }
             return;
         default:
             throw new MangoException(taskType);
@@ -47,7 +43,7 @@ public class MessageFormatter {
         if (message.trim().isEmpty()) {
             throw new MangoException("todo");
         }
-        return message.trim();
+        return message;
     }
 
     public String[] getDeadlineDescription() throws MangoException {

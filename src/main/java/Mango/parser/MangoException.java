@@ -1,3 +1,5 @@
+package Mango.parser;
+
 public class MangoException extends Exception {
     public MangoException(String taskType) {
         super(getErrorMessage(taskType));

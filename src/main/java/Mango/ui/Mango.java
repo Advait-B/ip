@@ -1,3 +1,12 @@
+package Mango.ui;
+
+import Mango.task.Deadline;
+import Mango.task.Event;
+import Mango.task.TaskManager;
+import Mango.task.Todo;
+import Mango.parser.MessageFormatter;
+import Mango.parser.MangoException;
+
 import java.util.Scanner;
 
 public class Mango {

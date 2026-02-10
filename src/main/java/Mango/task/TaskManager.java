@@ -1,8 +1,13 @@
+package Mango.task;
+
+import Mango.ui.Mango;
+import Mango.parser.MangoException;
+
 public class TaskManager {
     private static final int MAX_TASKS = 100;
-    private Task[] tasks;
-    private int taskCount;
-    private int completedTasks;
+    protected Task[] tasks;
+    protected int taskCount;
+    protected int completedTasks;
 
     public TaskManager() {
         this.tasks = new Task[MAX_TASKS];
