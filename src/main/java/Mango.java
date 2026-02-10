@@ -21,10 +21,10 @@ public class Mango {
 
     private static void chat() {
         Scanner in = new Scanner(System.in);
-        String input = in.nextLine();
-        while (!input.equals("bye")) {
+        String input = in.nextLine().trim();
+        while (!input.equalsIgnoreCase("bye")) {
             processCommand(input);
-            input = in.nextLine();
+            input = in.nextLine().trim();
         }
         in.close();
     }
@@ -34,7 +34,7 @@ public class Mango {
 
     private static void processCommand(String input) {
         String[] words = input.split(" ", 2);
-        String prompt = words[0];
+        String prompt = words[0].toLowerCase();
 
         // First, check if the prompt is 'list' (subsequent message, or lack thereof, is irrelevant)
         if (prompt.equals("list")) {
@@ -145,6 +145,13 @@ public class Mango {
         String description = input.substring(0, idx).trim();
         String by = input.substring(idx + BY_LENGTH).trim();
 
+        // Early exit if empty description
+        if (description.isEmpty()) {
+            System.out.println("oh dear, you have forgotten to add a task description");
+            helpMessage();
+            return;
+        }
+
         // Checks if the date to complete by is missing
         if (by.isEmpty()) {
             System.out.println("oh dear, you have forgotten to add a deadline");
@@ -181,10 +188,24 @@ public class Mango {
             return;
         }
 
+        // Returns early if input as /from/to without spacing
+        if (idx1 + FROM_LENGTH >= idx2) {
+            System.out.println("oh dear, please provide valid start and end dates");
+            helpMessage();
+            return;
+        }
+
         // Separates the string into its constituent parts
         String description = input.substring(0, idx1).trim();
         String from = input.substring(idx1 + FROM_LENGTH, idx2).trim();
         String to = input.substring(idx2 + TO_LENGTH).trim();
+
+        // Early exit if empty description
+        if (description.isEmpty()) {
+            System.out.println("oh dear, you have forgotten to add a task description");
+            helpMessage();
+            return;
+        }
 
         // Returns if any of the field descriptions are missing
         if (from.isEmpty() || to.isEmpty()) {
