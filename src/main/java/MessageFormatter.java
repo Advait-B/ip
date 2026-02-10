@@ -1,7 +1,8 @@
 public class MessageFormatter {
-    private static final int BY_LENGTH = 4;
-    private static final int FROM_LENGTH = 6;
-    private static final int TO_LENGTH = 4;
+
+    private static final int BY_LENGTH = 3;
+    private static final int FROM_LENGTH = 5;
+    private static final int TO_LENGTH = 3;
 
     private String taskType;
     private String message;
