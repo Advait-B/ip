@@ -1,18 +1,17 @@
-package Mango.ui;
+package mango.ui;
 
-import Mango.task.Deadline;
-import Mango.task.Event;
-import Mango.task.TaskManager;
-import Mango.task.Todo;
-import Mango.parser.MessageFormatter;
-import Mango.parser.MangoException;
+import mango.task.Deadline;
+import mango.task.Event;
+import mango.task.TaskManager;
+import mango.task.Todo;
+import mango.parser.MessageFormatter;
+import mango.parser.MangoException;
 
 import java.util.Scanner;
 
 public class Mango {
     public static void main(String[] args) {
         printGreetingMessage();
-        printHelpMessage();
         chat();
     }
 
@@ -42,8 +41,8 @@ public class Mango {
                     manager.addTask(new Todo(msg.getTodoDescription()));
                     break;
                 case "deadline":
-                    manager.addTask(new Deadline(msg.getDeadlineDescription()[0],
-                            msg.getDeadlineDescription()[1]));
+                    String[] d = msg.getDeadlineDescription();
+                    manager.addTask(new Deadline(d[0], d[1]));
                     break;
                 case "event":
                     manager.addTask(new Event(msg.getEventDescription()[0],
@@ -53,6 +52,9 @@ public class Mango {
                 case "help":
                     printHelpMessage();
                     break;
+                case "delete":
+                    manager.deleteTask(msg.getMarkedIndex());
+                    break;
                 }
             } catch (MangoException e) {
                 System.out.println(e.getMessage());
@@ -61,19 +63,21 @@ public class Mango {
     }
 
     private static void printGreetingMessage() {
-        System.out.println("hey there, i'm mango!" + System.lineSeparator() + "how can i help?");
+        System.out.println("hey there, i'm mango!");
+        System.out.println("how can i help?");
     }
 
     private static void printGoodbyeMessage() {
         System.out.println("bye! hope to see you again!");
     }
 
-    public static void printHelpMessage() {
+    private static void printHelpMessage() {
         System.out.println("please follow these guidelines for the possible task inputs:");
         System.out.println("1. todo: todo [taskdetails]");
         System.out.println("2. deadline: deadline [taskdetails] /by [datedetails]");
         System.out.println("3. event: event [taskdetails] /from [startdate] /to [enddate]");
-        System.out.println("please follow these guidelines for marking/unmarking:");
+        System.out.println("please follow these guidelines for marking/unmarking/deleting:");
         System.out.println("1. mark/unmark [tasknumber]");
+        System.out.println("2. delete [tasknumber]");
     }
 }

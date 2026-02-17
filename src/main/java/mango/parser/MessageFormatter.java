@@ -1,4 +1,4 @@
-package Mango.parser;
+package mango.parser;
 
 public class MessageFormatter {
 
@@ -27,6 +27,7 @@ public class MessageFormatter {
         case "todo":
         case "deadline":
         case "event":
+        case "delete":
         case "mark":
         case "unmark":
             return;
