@@ -1,11 +1,12 @@
-package Mango.ui;
+package mango.ui;
 
-import Mango.task.Deadline;
-import Mango.task.Event;
-import Mango.task.TaskManager;
-import Mango.task.Todo;
-import Mango.parser.MessageFormatter;
-import Mango.parser.MangoException;
+import mango.storage.Storage;
+import mango.task.Deadline;
+import mango.task.Event;
+import mango.task.TaskManager;
+import mango.task.Todo;
+import mango.parser.MessageFormatter;
+import mango.parser.MangoException;
 
 import java.util.Scanner;
 
@@ -17,7 +18,8 @@ public class Mango {
     }
 
     private static void chat() {
-        TaskManager manager = new TaskManager();
+        Storage storage = new Storage();
+        TaskManager manager = new TaskManager(storage);
         Scanner in = new Scanner(System.in);
 
         while (true) {

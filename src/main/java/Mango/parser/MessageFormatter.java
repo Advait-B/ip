@@ -1,4 +1,4 @@
-package Mango.parser;
+package mango.parser;
 
 public class MessageFormatter {
 
