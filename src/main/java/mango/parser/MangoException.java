@@ -1,4 +1,4 @@
-package Mango.parser;
+package mango.parser;
 
 public class MangoException extends Exception {
     public MangoException(String taskType) {
@@ -21,6 +21,9 @@ public class MangoException extends Exception {
         case "event":
             return "oh dear, invalid event command. please follow these guidelines:\n"
                     + "event: event [taskdetails] /from [startdate] /to [enddate]";
+        case "delete":
+            return "oh dear, invalid delete. please follow these guidelines:\n"
+                    + "delete: delete [tasknumber]";
         case "mark":
             return "oh dear, invalid mark command. please follow these guidelines:\n"
                     + "mark: mark [tasknumber]";

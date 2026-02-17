@@ -1,4 +1,4 @@
-package Mango.task;
+package mango.task;
 
 public class Deadline extends Task {
 
