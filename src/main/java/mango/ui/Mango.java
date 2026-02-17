@@ -1,5 +1,6 @@
 package mango.ui;
 
+import mango.storage.Storage;
 import mango.task.Deadline;
 import mango.task.Event;
 import mango.task.TaskManager;
@@ -16,7 +17,8 @@ public class Mango {
     }
 
     private static void chat() {
-        TaskManager manager = new TaskManager();
+        Storage storage = new Storage();
+        TaskManager manager = new TaskManager(storage);
         Scanner in = new Scanner(System.in);
 
         while (true) {
