@@ -1,7 +1,6 @@
 package mango.task;
 
 import mango.storage.Storage;
-import mango.ui.Mango;
 import mango.parser.MangoException;
 
 import java.util.ArrayList;
@@ -13,15 +12,23 @@ public class TaskManager {
     private final ArrayList<Task> tasks;
     private int completedTasks;
 
+    /**
+     * Creates a TaskManager that loads tasks using the given storage.
+     */
     public TaskManager(Storage storage) {
         this.storage = storage;
         this.tasks = storage.load();
         this.completedTasks = 0;
         for (Task t : tasks) {
-            if (t.isDone()) completedTasks++;
+            if (t.isDone()) {
+                completedTasks++;
+            }
         }
     }
 
+    /**
+     * Adds a task to the task list and saves the updated list.
+     */
     public void addTask(Task task) throws MangoException {
         if (tasks.size() >= MAX_TASKS) {
             throw new MangoException("task limit");
@@ -34,6 +41,9 @@ public class TaskManager {
         System.out.println("now you have " + tasks.size() + " tasks in the list.");
     }
 
+    /**
+     * Deletes a task from the task list at a specific index.
+     */
     public void deleteTask(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {
             throw new MangoException("invalid index");
@@ -50,7 +60,9 @@ public class TaskManager {
         System.out.println("now you have " + tasks.size() + " tasks in the list.");
     }
 
-
+    /**
+     * Prints all tasks currently stored in the task list.
+     */
     public void listTasks() {
         if (tasks.isEmpty()) {
             System.out.println("please add some tasks for us to list.");
@@ -72,6 +84,11 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Marks the task at the specified index as done and saves the updated list.
+     *
+     * @throws MangoException If the index is out of range or the task is already marked done.
+     */
     public void markTaskAsDone(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {
             throw new MangoException("invalid index");
@@ -90,6 +107,11 @@ public class TaskManager {
         System.out.println(task);
     }
 
+    /**
+     * Unmarks the task at the specified index and saves the updated list.
+     *
+     * @throws MangoException If the index is out of range or the task is already unmarked.
+     */
     public void unmarkTask(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {
             throw new MangoException("invalid index");

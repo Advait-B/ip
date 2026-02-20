@@ -5,6 +5,9 @@ public class MangoException extends Exception {
         super(getErrorMessage(taskType));
     }
 
+    /**
+     * Returns an appropriate error message corresponding to the specified error type.
+     */
     private static String getErrorMessage(String taskType) {
         if (taskType == null || taskType.isEmpty()) {
             return "oh dear, no command entered. use \"help\" to see available commands.";

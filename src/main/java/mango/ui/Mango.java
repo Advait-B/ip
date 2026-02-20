@@ -16,6 +16,9 @@ public class Mango {
         chat();
     }
 
+    /**
+     * Reads user input and executes commands.
+     */
     private static void chat() {
         Storage storage = new Storage();
         TaskManager manager = new TaskManager(storage);
@@ -57,6 +60,8 @@ public class Mango {
                 case "delete":
                     manager.deleteTask(msg.getMarkedIndex());
                     break;
+                default:
+                    break;
                 }
             } catch (MangoException e) {
                 System.out.println(e.getMessage());
@@ -73,6 +78,9 @@ public class Mango {
         System.out.println("bye! hope to see you again!");
     }
 
+    /**
+     * Prints instructions describing the valid command formats supported by the program.
+     */
     private static void printHelpMessage() {
         System.out.println("please follow these guidelines for the possible task inputs:");
         System.out.println("1. todo: todo [taskdetails]");

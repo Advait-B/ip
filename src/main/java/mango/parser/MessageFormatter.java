@@ -9,6 +9,9 @@ public class MessageFormatter {
     protected String taskType;
     protected String message;
 
+    /**
+     * Creates a formatter from the given user input to be validated.
+     */
     public MessageFormatter(String userInput) throws MangoException {
         if (userInput == null || userInput.trim().isEmpty()) {
             throw new MangoException("null input");
@@ -19,6 +22,9 @@ public class MessageFormatter {
         validateCommand();
     }
 
+    /**
+     * Validates the command.
+     */
     private void validateCommand() throws MangoException {
         switch (taskType) {
         case "list":
@@ -40,6 +46,11 @@ public class MessageFormatter {
         return taskType;
     }
 
+    /**
+     * Returns the description.
+     *
+     * @throws MangoException if the description format is empty.
+     */
     public String getTodoDescription() throws MangoException {
         if (message.trim().isEmpty()) {
             throw new MangoException("todo");
@@ -47,6 +58,11 @@ public class MessageFormatter {
         return message;
     }
 
+    /**
+     * Returns the description and deadline for a deadline command.
+     *
+     * @throws MangoException if the command format is invalid.
+     */
     public String[] getDeadlineDescription() throws MangoException {
         boolean containsDeadline = message.contains("/by");
         if (!containsDeadline) {
@@ -65,9 +81,14 @@ public class MessageFormatter {
             throw new MangoException("deadline");
         }
 
-        return new String[]{description, by};
+        return new String[] {description, by};
     }
 
+    /**
+     * Returns the description, start time, and end time for an event command.
+     *
+     * @throws MangoException if the command format is invalid.
+     */
     public String[] getEventDescription() throws MangoException {
         boolean containsFrom = message.contains("/from");
         boolean containsTo = message.contains("/to");
@@ -98,9 +119,14 @@ public class MessageFormatter {
             throw new MangoException("event");
         }
 
-        return new String[]{description, from, to};
+        return new String[] {description, from, to};
     }
 
+    /**
+     * Returns the task index specified in the command.
+     *
+     * @throws MangoException if the index is not a valid number or is out of range.
+     */
     public int getMarkedIndex() throws MangoException {
         try {
             int index = Integer.parseInt(message.trim()) - 1;
