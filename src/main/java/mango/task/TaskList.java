@@ -5,7 +5,7 @@ import mango.parser.MangoException;
 
 import java.util.ArrayList;
 
-public class TaskManager {
+public class TaskList {
     private static final int MAX_TASKS = 100;
 
     private final Storage storage;
@@ -15,7 +15,7 @@ public class TaskManager {
     /**
      * Creates a TaskManager that loads tasks using the given storage.
      */
-    public TaskManager(Storage storage) {
+    public TaskList(Storage storage) {
         this.storage = storage;
         this.tasks = storage.load();
         this.completedTasks = 0;
@@ -50,6 +50,7 @@ public class TaskManager {
         }
 
         Task removed = tasks.remove(index);
+        storage.save(tasks);
 
         if (removed.isDone()) {
             completedTasks--;
