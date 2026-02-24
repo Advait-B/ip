@@ -1,12 +1,19 @@
 package mango.parser;
 
+/**
+ * Represents specific exceptions for invalid user inputs or task operations.
+ */
 public class MangoException extends Exception {
+
     public MangoException(String taskType) {
         super(getErrorMessage(taskType));
     }
 
     /**
-     * Returns an appropriate error message corresponding to the specified error type.
+     * Returns a user-friendly error message corresponding to the specified error key.
+     *
+     * @param taskType Error scenario.
+     * @return Error message to display to the user.
      */
     private static String getErrorMessage(String taskType) {
         if (taskType == null || taskType.isEmpty()) {
@@ -39,13 +46,9 @@ public class MangoException extends Exception {
         case "task limit":
             return "sorry.. i cannot add anymore tasks.";
         case "invalid index":
-            return "invalid task number.";
+            return "oh dear, that task number doesn't exist.";
         case "not a number":
-            return "please input a number in the valid task range. try again.";
-        case "already marked":
-            return "this task is already marked as done.";
-        case "already unmarked":
-            return "this task is already unmarked.";
+            return "oh dear, please enter a valid task number.";
         default:
             return "oh dear, i don't recognize that command.\n"
                     + "use \"help\" to see the list of all commands.";

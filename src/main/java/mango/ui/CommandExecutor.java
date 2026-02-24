@@ -7,10 +7,18 @@ import mango.task.Event;
 import mango.task.TaskList;
 import mango.task.Todo;
 
+/**
+ * Executes user commands by dispatching to the appropriate task operations.
+ */
 public class CommandExecutor {
 
     /**
-     * Executes command based on formatting.
+     * Executes the command based on the user input.
+     *
+     * @param msg Parsed user input containing the command type and arguments.
+     * @param manager Task list to operate on.
+     * @return True if the command should terminate the program; False otherwise.
+     * @throws MangoException If the command is unknown or if the command arguments are invalid.
      */
     public static boolean execute(MessageFormatter msg, TaskList manager) throws MangoException {
         switch (msg.getTaskType()) {
@@ -54,7 +62,7 @@ public class CommandExecutor {
     }
 
     /**
-     * Prints instructions describing the valid command formats supported by the program.
+     * Prints a summary of supported command formats.
      */
     private static void printHelpMessage() {
         System.out.println("please follow these guidelines for the possible task inputs:");

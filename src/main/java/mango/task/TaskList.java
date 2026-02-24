@@ -5,15 +5,19 @@ import mango.parser.MangoException;
 
 import java.util.ArrayList;
 
+/**
+ * Stores and manages the user's tasks, and persists changes via Storage.
+ */
 public class TaskList {
     private static final int MAX_TASKS = 100;
-
     private final Storage storage;
     private final ArrayList<Task> tasks;
     private int completedTasks;
 
     /**
-     * Creates a TaskManager that loads tasks using the given storage.
+     * Creates a task list backed by the given storage and loads existing tasks.
+     *
+     * @param storage Storage used to load and save tasks.
      */
     public TaskList(Storage storage) {
         this.storage = storage;
@@ -28,6 +32,9 @@ public class TaskList {
 
     /**
      * Adds a task to the task list and saves the updated list.
+     *
+     * @param task Task to add.
+     * @throws MangoException If the task limit is reached.
      */
     public void addTask(Task task) throws MangoException {
         if (tasks.size() >= MAX_TASKS) {
@@ -42,7 +49,10 @@ public class TaskList {
     }
 
     /**
-     * Deletes a task from the task list at a specific index.
+     * Deletes the task at the specified index and saves the updated list.
+     *
+     * @param index Zero-based task index.
+     * @throws MangoException If the index is out of range.
      */
     public void deleteTask(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {
@@ -61,6 +71,11 @@ public class TaskList {
         System.out.println("now you have " + tasks.size() + " tasks in the list.");
     }
 
+    /**
+     * Prints tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword Keyword used to match task descriptions.
+     */
     public void findTask(String keyword) {
         System.out.println("looking for the matching tasks in your list:");
         int matchIndex = 1;
@@ -77,7 +92,7 @@ public class TaskList {
     }
 
     /**
-     * Prints all tasks currently stored in the task list.
+     * Prints all tasks currently in the list.
      */
     public void listTasks() {
         if (tasks.isEmpty()) {
@@ -103,7 +118,8 @@ public class TaskList {
     /**
      * Marks the task at the specified index as done and saves the updated list.
      *
-     * @throws MangoException If the index is out of range or the task is already marked done.
+     * @param index Zero-based task index.
+     * @throws MangoException If the index is out of range.
      */
     public void markTaskAsDone(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {
@@ -124,9 +140,10 @@ public class TaskList {
     }
 
     /**
-     * Unmarks the task at the specified index and saves the updated list.
+     * Marks the task at the specified index as not done and saves the updated list.
      *
-     * @throws MangoException If the index is out of range or the task is already unmarked.
+     * @param index Zero-based task index.
+     * @throws MangoException If the index is out of range.
      */
     public void unmarkTask(int index) throws MangoException {
         if (index < 0 || index >= tasks.size()) {

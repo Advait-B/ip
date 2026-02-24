@@ -7,6 +7,10 @@ import mango.parser.MangoException;
 
 import java.util.Scanner;
 
+/**
+ * Entry point for the Mango chatbot application.
+ * Handles the main program flow and delegates command execution.
+ */
 public class Mango {
     public static void main(String[] args) {
         printGreetingMessage();
@@ -15,7 +19,7 @@ public class Mango {
     }
 
     /**
-     * Reads user input and executes commands.
+     * Reads user input and executes commands until an exit command is received.
      */
     private static void chat() {
         Storage storage = new Storage();
