@@ -1,5 +1,8 @@
 package mango.task;
 
+/**
+ * Represents a task with a description.
+ */
 public class Todo extends Task {
 
     public Todo(String description) {
