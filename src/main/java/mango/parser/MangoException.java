@@ -27,6 +27,9 @@ public class MangoException extends Exception {
         case "delete":
             return "oh dear, invalid delete. please follow these guidelines:\n"
                     + "delete: delete [tasknumber]";
+        case "find":
+            return "oh dear, invalid find command. please follow these guidelines:\n"
+                    + "find: find [keyword]";
         case "mark":
             return "oh dear, invalid mark command. please follow these guidelines:\n"
                     + "mark: mark [tasknumber]";

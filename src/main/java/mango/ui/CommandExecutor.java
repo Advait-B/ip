@@ -44,6 +44,9 @@ public class CommandExecutor {
         case "delete":
             manager.deleteTask(msg.getMarkedIndex());
             return false;
+        case "find":
+            manager.findTask(msg.getFindKeyword());
+            return false;
         default:
             throw new MangoException("oh dear, i don't recognize that command.\n"
                     + "use \"help\" to see the list of all commands.");
@@ -58,8 +61,9 @@ public class CommandExecutor {
         System.out.println("1. todo: todo [taskdetails]");
         System.out.println("2. deadline: deadline [taskdetails] /by [datedetails]");
         System.out.println("3. event: event [taskdetails] /from [startdate] /to [enddate]");
-        System.out.println("please follow these guidelines for marking/unmarking/deleting:");
+        System.out.println("please follow these guidelines for actions:");
         System.out.println("1. mark/unmark [tasknumber]");
         System.out.println("2. delete [tasknumber]");
+        System.out.println("3. find [taskname]");
     }
 }

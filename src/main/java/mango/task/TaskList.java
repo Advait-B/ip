@@ -61,6 +61,21 @@ public class TaskList {
         System.out.println("now you have " + tasks.size() + " tasks in the list.");
     }
 
+    public void findTask(String keyword) {
+        System.out.println("looking for the matching tasks in your list:");
+        int matchIndex = 1;
+        for (Task task : tasks) {
+            String description = task.getDescription().toLowerCase();
+            if (description.contains(keyword)) {
+                System.out.println(matchIndex + ". " + task);
+                matchIndex++;
+            }
+        }
+        if (matchIndex == 1) {
+            System.out.println("oh dear, no matching tasks found :(");
+        }
+    }
+
     /**
      * Prints all tasks currently stored in the task list.
      */

@@ -34,6 +34,7 @@ public class MessageFormatter {
         case "deadline":
         case "event":
         case "delete":
+        case "find":
         case "mark":
         case "unmark":
             return;
@@ -137,5 +138,12 @@ public class MessageFormatter {
         } catch (NumberFormatException exception) {
             throw new MangoException("not a number");
         }
+    }
+
+    public String getFindKeyword() throws MangoException {
+        if (message.trim().isEmpty()) {
+            throw new MangoException("find");
+        }
+        return message.trim().toLowerCase();
     }
 }
