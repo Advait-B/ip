@@ -11,11 +11,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading and saving tasks to a local text file.
+ */
 public class Storage {
     private static final String FILE_PATH = "data" + File.separator + "mango.txt";
 
     /**
-     * Loads tasks from the save file, returning an empty list if the file does not exist.
+     * Loads tasks from the save file.
+     *
+     * @return List of tasks loaded from disk; empty if no save file exists.
      */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -41,7 +46,9 @@ public class Storage {
     }
 
     /**
-     * Saves the given tasks to the save file, overwriting any existing contents.
+     * Saves the given task list to disk, overwriting any existing save file.
+     *
+     * @param tasks Tasks to be saved.
      */
     public void save(ArrayList<Task> tasks) {
         File file = new File(FILE_PATH);
@@ -56,7 +63,10 @@ public class Storage {
     }
 
     /**
-     * Returns a string representation of the given task suitable for saving to disk.
+     * Converts a task into the save-file line format.
+     *
+     * @param task Task to serialise.
+     * @return Line representation of the task.
      */
     private String serialise(Task task) {
         int done = task.isDone() ? 1 : 0;
@@ -71,7 +81,10 @@ public class Storage {
     }
 
     /**
-     * Parses a saved line into a Task, or returns null if the line is invalid.
+     * Parses a single line from the save file into a task.
+     *
+     * @param line One line from the save file.
+     * @return Parsed task, or null if the line is invalid.
      */
     private Task parseLine(String line) {
         String[] parts = line.split(" \\| ");

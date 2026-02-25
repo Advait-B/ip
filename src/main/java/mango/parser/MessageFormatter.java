@@ -1,16 +1,22 @@
 package mango.parser;
 
+/**
+ * Parses a raw user input line into a command type and its argument string.
+ * Provides helper methods to validate and extract command parameters.
+ */
 public class MessageFormatter {
 
     private static final int BY_LENGTH = 3;
     private static final int FROM_LENGTH = 5;
     private static final int TO_LENGTH = 3;
-
     protected String taskType;
     protected String message;
 
     /**
-     * Creates a formatter from the given user input to be validated.
+     * Creates a formatter from the given user input.
+     *
+     * @param userInput Full input line entered by the user.
+     * @throws MangoException If the input is null or blank.
      */
     public MessageFormatter(String userInput) throws MangoException {
         if (userInput == null || userInput.trim().isEmpty()) {
@@ -19,28 +25,6 @@ public class MessageFormatter {
         String[] words = userInput.split(" ", 2);
         taskType = words[0].toLowerCase();
         message = words.length > 1 ? words[1] : "";
-        validateCommand();
-    }
-
-    /**
-     * Validates the command.
-     */
-    private void validateCommand() throws MangoException {
-        switch (taskType) {
-        case "list":
-        case "bye":
-        case "help":
-        case "todo":
-        case "deadline":
-        case "event":
-        case "delete":
-        case "find":
-        case "mark":
-        case "unmark":
-            return;
-        default:
-            throw new MangoException(taskType);
-        }
     }
 
     public String getTaskType() {
@@ -48,9 +32,10 @@ public class MessageFormatter {
     }
 
     /**
-     * Returns the description.
+     * Returns the task description for a todo command.
      *
-     * @throws MangoException if the description format is empty.
+     * @return Task description.
+     * @throws MangoException If the description is missing.
      */
     public String getTodoDescription() throws MangoException {
         if (message.trim().isEmpty()) {
@@ -60,9 +45,10 @@ public class MessageFormatter {
     }
 
     /**
-     * Returns the description and deadline for a deadline command.
+     * Returns the task description and deadline component for a deadline command.
      *
-     * @throws MangoException if the command format is invalid.
+     * @return Array of length 2: [description, by].
+     * @throws MangoException If the command format is invalid or either component is missing.
      */
     public String[] getDeadlineDescription() throws MangoException {
         boolean containsDeadline = message.contains("/by");
@@ -86,9 +72,10 @@ public class MessageFormatter {
     }
 
     /**
-     * Returns the description, start time, and end time for an event command.
+     * Returns the task description, start time, and end time for an event command.
      *
-     * @throws MangoException if the command format is invalid.
+     * @return Array of length 3: [description, from, to].
+     * @throws MangoException If the command format is invalid or any component is missing.
      */
     public String[] getEventDescription() throws MangoException {
         boolean containsFrom = message.contains("/from");
@@ -124,9 +111,10 @@ public class MessageFormatter {
     }
 
     /**
-     * Returns the task index specified in the command.
+     * Returns the zero-based task index specified by mark, unmark, or delete.
      *
-     * @throws MangoException if the index is not a valid number or is out of range.
+     * @return Zero-based task index.
+     * @throws MangoException If the index is missing, not a number, or less than 1.
      */
     public int getMarkedIndex() throws MangoException {
         try {
@@ -140,6 +128,12 @@ public class MessageFormatter {
         }
     }
 
+    /**
+     * Returns the keyword used by the find command.
+     *
+     * @return Lowercased keyword for matching against task descriptions.
+     * @throws MangoException If the keyword is missing.
+     */
     public String getFindKeyword() throws MangoException {
         if (message.trim().isEmpty()) {
             throw new MangoException("find");

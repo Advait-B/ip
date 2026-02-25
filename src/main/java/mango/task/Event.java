@@ -1,5 +1,8 @@
 package mango.task;
 
+/**
+ * Represents a task that occurs during a specified time range.
+ */
 public class Event extends Task {
     private final String from;
     private final String to;
