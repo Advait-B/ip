@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.6'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'mango.ui.Mango'
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('ip')
+    archiveVersion.set('')
+    archiveClassifier.set('')
+}
