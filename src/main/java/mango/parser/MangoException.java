@@ -49,6 +49,10 @@ public class MangoException extends Exception {
             return "oh dear, that task number doesn't exist.";
         case "not a number":
             return "oh dear, please enter a valid task number.";
+        case "already marked":
+            return "it looks like that task is already marked as done :)";
+        case "already unmarked":
+            return "it looks like that task is already marked as not done :)";
         default:
             return "oh dear, i don't recognize that command.\n"
                     + "use \"help\" to see the list of all commands.";

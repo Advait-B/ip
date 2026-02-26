@@ -12,6 +12,9 @@ import java.util.Scanner;
  * Handles the main program flow and delegates command execution.
  */
 public class Mango {
+
+    private static final String DIVIDER = "------------------------------";
+
     public static void main(String[] args) {
         printGreetingMessage();
         chat();
@@ -28,6 +31,7 @@ public class Mango {
 
         while (true) {
             String userInput = in.nextLine().trim();
+            System.out.println(DIVIDER);
             try {
                 MessageFormatter msg = new MessageFormatter(userInput);
                 boolean isExit = CommandExecutor.execute(msg, manager);
@@ -35,8 +39,10 @@ public class Mango {
                     in.close();
                     return;
                 }
+                System.out.println(DIVIDER);
             } catch (MangoException e) {
                 System.out.println(e.getMessage());
+                System.out.println(DIVIDER);
             }
         }
     }
@@ -44,9 +50,11 @@ public class Mango {
     private static void printGreetingMessage() {
         System.out.println("hey there, i'm mango!");
         System.out.println("how can i help?");
+        System.out.println(DIVIDER);
     }
 
     private static void printGoodbyeMessage() {
         System.out.println("bye! hope to see you again!");
+        System.out.println(DIVIDER);
     }
 }

@@ -45,7 +45,7 @@ public class TaskList {
 
         System.out.println("got it. i've added this task:");
         System.out.println("  " + task);
-        System.out.println("now you have " + tasks.size() + " tasks in the list.");
+        System.out.println("now you have " + tasks.size() + " task(s) in the list.");
     }
 
     /**
@@ -68,7 +68,7 @@ public class TaskList {
 
         System.out.println("noted. i've removed this task:");
         System.out.println("  " + removed);
-        System.out.println("now you have " + tasks.size() + " tasks in the list.");
+        System.out.println("now you have " + tasks.size() + " task(s) in the list.");
     }
 
     /**
@@ -136,7 +136,7 @@ public class TaskList {
         storage.save(tasks);
 
         System.out.println("hooray! you've completed this task. i've marked it as done:");
-        System.out.println(task);
+        System.out.println(" " + task);
     }
 
     /**
@@ -160,6 +160,6 @@ public class TaskList {
         storage.save(tasks);
 
         System.out.println("oh dear, it seems you have not completed this task. i've unmarked it:");
-        System.out.println(task);
+        System.out.println(" " + task);
     }
 }
