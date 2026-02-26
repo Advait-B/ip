@@ -24,3 +24,9 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+build.gradle
+gradlew
+gradlew.bat
+settings.gradle
+gradle/
+.gitattributes
