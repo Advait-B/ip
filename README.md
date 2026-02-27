@@ -10,13 +10,13 @@ Mango is a command-line task management application that helps users manage and 
 
 ### Application Setup
 
-1. Download the latest `mango.jar` from this repository’s Releases page.
+1. Download the latest `ip.jar` from this repository’s Releases page.
 2. Place the JAR file in an empty folder.
 3. Open a terminal in that folder.
 4. Run:
 
 ```bash
-java -jar mango.jar
+java -jar ip.jar
 ```
 
 Mango will display a greeting message.
